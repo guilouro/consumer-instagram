@@ -1,0 +1,53 @@
+<!doctype html>
+<html class="no-js" lang="en" xmlns:fb="http://ogp.me/ns/fb#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>{% block title %} {% endblock title %}</title>
+
+        <meta name="description" content="">
+
+        <!-- Schema.org markup for Google+ -->
+        <meta itemprop="name" content="">
+        <meta itemprop="description" content="">
+        <meta itemprop="image" content="{{ url_for('static', filename='img/instagram.png') }}">
+
+        <!-- FACEBOOK -->
+        <meta property="og:title" content="" />
+        <meta property="og:type" content="article" />
+        <meta property="og:image" content="{{ url_for('static', filename='img/instagram.png') }}"/>
+        <meta property="og:description" content="" />
+
+        <!-- TWITTER -->
+        <meta name="twitter:card" content="{{ url_for('static', filename='img/instagram.png') }}">
+        <meta name="twitter:title" content="">
+        <meta name="twitter:description" content="">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico')}}">
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,700,60">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    </head>
+    <body>
+
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+
+        <header>
+
+        </header>
+
+        <section>
+            {% block content %}{% endblock content %}
+        </section>
+
+            <footer>
+                <p>Made with Flask by <a href="http://github.com/guilouro/consumer-instagram" target="_blank"> <i class="fa fa-github"></i>guilouro</a></p>
+            </footer>
+    </body>
+</html>
