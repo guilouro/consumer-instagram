@@ -7,14 +7,23 @@ a
 
 header
     height: 10vh
+    position: relative
 
 section
     height: 80vh
     width: 100%
 
-.center-content
-    @include j-align(both)
-
 footer
     height: 10vh
     text-align: center
+
+.align-both, .center-content
+    @include j-align(both)
+
+.backimg
+    background: #000 url('../img/bg-blur.jpg')
+    width: 100%
+    height: 100vh
+    position: fixed
+    background-size: cover
+    z-index: -1
