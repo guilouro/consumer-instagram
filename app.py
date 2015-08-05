@@ -19,7 +19,7 @@ auth = client.InstagramAPI(**CONFIG)
 def index():
     try:
         url = auth.get_authorize_url(scope=["likes", "comments"])
-        return '<a href="%s">Connect with Instagram</a>' % url
+        return render_template('auth.html', url=url)
     except Exception as e:
         print e
 

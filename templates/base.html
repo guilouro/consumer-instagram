@@ -38,16 +38,19 @@
         <![endif]-->
 
 
-        <header>
 
+        <header>
+            {% block header %}{% endblock header %}
         </header>
 
         <section>
-            {% block content %}{% endblock content %}
+            <div class="center-content">
+                {% block content %}{% endblock content %}
+            </div>
         </section>
 
-            <footer>
-                <p>Made with Flask by <a href="http://github.com/guilouro/consumer-instagram" target="_blank"> <i class="fa fa-github"></i>guilouro</a></p>
-            </footer>
+        <footer>
+            <span>Made with Flask by <a href="http://github.com/guilouro/consumer-instagram" target="_blank"> <i class="fa fa-github"></i>guilouro</a></span>
+        </footer>
     </body>
 </html>
