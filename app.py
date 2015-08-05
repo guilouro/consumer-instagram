@@ -1,9 +1,10 @@
 # coding: utf8
-from flask import Flask, render_template
+from flask import Flask, render_template, request, session, redirect
 from instagram import client
 import os
 
 app = Flask('consumer-instagram')
+app.secret_key = '\xcb\xf0\x83"\xbe\xeb\x85\xa6rm\x95\xfe\x10\x920\xef\xaf&rs\xf1\x11}P'
 
 CONFIG = {
     'client_id': '77da745ad09b49389fc1af582f4f9da2',
@@ -26,6 +27,24 @@ def index():
     return 'teste'
 
 
+@app.route('/auth_callback', methods=['GET'])
+def callback():
+    code = request.values['code']
+    if not code:
+        return render_template('msg.html', msg='Missing code')
+    try:
+        access_token, user_info = auth.exchange_code_for_access_token(code)
+        if not access_token:
+            return render_template('msg.html', msg='Could not get access token')
+        api = client.InstagramAPI(
+            access_token, client_secret=CONFIG['client_secret'])
+        session['access_token'] = access_token
+    except Exception as e:
+        print e
+
+    return redirect('/')
+
+
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port, use_reloader=True, debug=True)

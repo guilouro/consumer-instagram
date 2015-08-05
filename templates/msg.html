@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <img class="align-both" src="{{ url_for('static', filename='img/instagram_logo.png') }}" alt="Logo instagram">
+{% endblock header %}
+
+
+{% block back %}
+    <div class="backimg"></div>
+{% endblock back %}
+
+
+{% block content %}
+    {{ msg }}
+{% endblock content %}
