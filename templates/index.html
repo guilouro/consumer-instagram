@@ -1,13 +1,22 @@
 {% extends "base.html" %}
 
+{% block header %}
+    <img class="align-both" src="{{ url_for('static', filename='img/instagram_logo.png') }}" alt="Logo instagram">
+{% endblock header %}
+
 {% block back %}
 
-    {% for m in media %}
-        <a href="{{ m.link }}" target="_blank"><img src="{{ m.images['thumbnail'].url }}" alt="{{ m.caption }}"></a>
-    {% endfor %}
+    <div id="pictures">
+        {% for m in media %}
+            <img src="{{ m.images['thumbnail'].url }}" alt="{{ m.caption }}">
+        {% endfor %}
+    </div>
 
 {% endblock back %}
 
 {% block content %}
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure mollitia explicabo autem praesentium, ratione quas earum at ad eveniet voluptatibus nam illo. Quam placeat pariatur ea illo, et ut maiores.
+
+    {% if tag %}
+        <h1>#{{ tag }}</h1>
+    {% endif %}
 {% endblock content %}

@@ -18,6 +18,7 @@ auth = client.InstagramAPI(**CONFIG)
 
 @app.route('/')
 def index():
+
     try:
         url = auth.get_authorize_url(scope=["likes", "comments"])
         return render_template('auth.html', url=url)
@@ -67,7 +68,7 @@ def tag(tag_name):
     except Exception as e:
         return render_template('msg.html', msg=e)
 
-    return render_template('index.html', media=media)
+    return render_template('index.html', media=media, tag=tag_name)
 
 
 def is_authorized():
