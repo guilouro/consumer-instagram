@@ -22,7 +22,7 @@ def index():
         url = auth.get_authorize_url(scope=["likes", "comments"])
         return render_template('auth.html', url=url)
     except Exception as e:
-        print e
+        return render_template('msg.html', msg=e)
 
     return 'teste'
 
@@ -40,8 +40,9 @@ def callback():
         api = client.InstagramAPI(
             access_token, client_secret=CONFIG['client_secret'])
         session['access_token'] = access_token
+        session['user_info'] = user_info
     except Exception as e:
-        print e
+        return render_template('msg.html', msg=e)
 
     return redirect('/')
 
@@ -53,12 +54,15 @@ def tag(tag_name):
 
     try:
         api = client.InstagramAPI(
-            session['access_token'], client_secret=CONFIG['client_secret'])
+            access_token=session['access_token'],
+            client_secret=CONFIG['client_secret']
+        )
+
         media, next_ = api.tag_recent_media(tag_name=tag_name, count=100)
 
         while next_ and len(media) < 100:
-            more_medias, next_ = api.tag_recent_media(with_next_url=next_)
-            media.extend(mode_medias)
+            more_medias, next_ = api.tag_recent_media(with_next_url=next_, tag_name=tag_name, count=100)
+            media.extend(more_medias)
 
     except Exception as e:
         return render_template('msg.html', msg=e)

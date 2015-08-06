@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 
+{% block back %}
+
+    {% for m in media %}
+        <a href="{{ m.link }}" target="_blank"><img src="{{ m.images['thumbnail'].url }}" alt="{{ m.caption }}"></a>
+    {% endfor %}
+
+{% endblock back %}
+
 {% block content %}
     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure mollitia explicabo autem praesentium, ratione quas earum at ad eveniet voluptatibus nam illo. Quam placeat pariatur ea illo, et ut maiores.
 {% endblock content %}
