@@ -19,6 +19,27 @@ auth = client.InstagramAPI(**CONFIG)
 @app.route('/')
 def index():
 
+    if is_authorized():
+
+        try:
+            api = client.InstagramAPI(
+                access_token=session['access_token'],
+                client_secret=CONFIG['client_secret']
+            )
+
+            user = api.user()
+
+            media, next_ = api.user_recent_media(user_id=user.id)
+
+            while next_ and len(media) < 100:
+                more_medias, next_ = api.user_recent_media(with_next_url=next_, user_id=user.id)
+                media.extend(more_medias)
+
+        except Exception as e:
+            return render_template('msg.html', msg=e)
+
+        return render_template('index.html', media=media)
+
     try:
         url = auth.get_authorize_url(scope=["likes", "comments"])
         return render_template('auth.html', url=url)
