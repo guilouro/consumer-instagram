@@ -35,7 +35,8 @@ def callback():
     try:
         access_token, user_info = auth.exchange_code_for_access_token(code)
         if not access_token:
-            return render_template('msg.html', msg='Could not get access token')
+            return render_template('msg.html',
+                                   msg='Could not get access token')
         api = client.InstagramAPI(
             access_token, client_secret=CONFIG['client_secret'])
         session['access_token'] = access_token
@@ -44,6 +45,29 @@ def callback():
 
     return redirect('/')
 
+
+@app.route('/tag/<tag_name>')
+def tag(tag_name):
+    if not is_authorized():
+        redirect('/')
+
+    try:
+        api = client.InstagramAPI(
+            session['access_token'], client_secret=CONFIG['client_secret'])
+        media, next_ = api.tag_recent_media(tag_name=tag_name, count=100)
+
+        while next_ and len(media) < 100:
+            more_medias, next_ = api.tag_recent_media(with_next_url=next_)
+            media.extend(mode_medias)
+
+    except Exception as e:
+        return render_template('msg.html', msg=e)
+
+    return render_template('index.html', media=media)
+
+
+def is_authorized():
+    return False if not session['access_token'] else True
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))

@@ -31,6 +31,10 @@ class FlaskAppTest(unittest.TestCase):
         )
         self.assertEqual(self.callback.status_code, 200)
 
+    def test_get_tag(self):
+        self.tag = self.client.get('/tag/instagram')
+        self.assertEqual(self.tag.status_code, 200)
+
 
 if __name__ == '__main__':
     unittest.main()
