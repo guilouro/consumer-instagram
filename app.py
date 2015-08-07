@@ -19,21 +19,15 @@ auth = client.InstagramAPI(**CONFIG)
 @app.route('/')
 def index():
 
-    if is_authorized():
-
+    if is_authorized:
         try:
             api = client.InstagramAPI(
                 access_token=session['access_token'],
                 client_secret=CONFIG['client_secret']
             )
 
-            user = api.user()
-
-            media, next_ = api.user_recent_media(user_id=user.id)
-
-            while next_ and len(media) < 100:
-                more_medias, next_ = api.user_recent_media(with_next_url=next_, user_id=user.id)
-                media.extend(more_medias)
+            media = request_media(
+                api.user_recent_media, {'user_id': api.user().id})
 
         except Exception as e:
             return render_template('msg.html', msg=e)
@@ -45,8 +39,6 @@ def index():
         return render_template('auth.html', url=url)
     except Exception as e:
         return render_template('msg.html', msg=e)
-
-    return 'teste'
 
 
 @app.route('/auth_callback', methods=['GET'])
@@ -71,7 +63,7 @@ def callback():
 
 @app.route('/tag/<tag_name>')
 def tag(tag_name):
-    if not is_authorized():
+    if not is_authorized:
         redirect('/')
 
     try:
@@ -80,11 +72,7 @@ def tag(tag_name):
             client_secret=CONFIG['client_secret']
         )
 
-        media, next_ = api.tag_recent_media(tag_name=tag_name, count=100)
-
-        while next_ and len(media) < 100:
-            more_medias, next_ = api.tag_recent_media(with_next_url=next_, tag_name=tag_name, count=100)
-            media.extend(more_medias)
+        media = request_media(api.tag_recent_media, {'tag_name': tag_name})
 
     except Exception as e:
         return render_template('msg.html', msg=e)
@@ -92,8 +80,25 @@ def tag(tag_name):
     return render_template('index.html', media=media, tag=tag_name)
 
 
+def request_media(method, params):
+    try:
+        media, next_ = method(count=100, **params)
+
+        while next_ and len(media) < 100:
+            more_medias, next_ = method(
+                with_next_url=next_, count=100, **params)
+            media.extend(more_medias)
+
+    except Exception as e:
+        return render_template('msg.html', msg=e)
+
+    return media
+
+
+@property
 def is_authorized():
     return False if not session['access_token'] else True
+
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
