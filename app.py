@@ -17,7 +17,8 @@ auth = client.InstagramAPI(**CONFIG)
 
 
 @app.route('/')
-def index():
+@app.route('/<username>')
+def index(username=None):
 
     if is_authorized():
         try:
@@ -26,8 +27,13 @@ def index():
                 client_secret=CONFIG['client_secret']
             )
 
+            if username is None:
+                user_id = api.user().id
+            else:
+                user_id = api.user_search(username)[0].id
+
             media = request_media(
-                api.user_recent_media, {'user_id': api.user().id})
+                api.user_recent_media, {'user_id': user_id})
 
         except Exception as e:
             return render_template('msg.html', msg=e)
@@ -82,8 +88,6 @@ def popular():
     return render_template('index.html', media=media, text=text)
 
 
-
-
 @app.route('/auth_callback', methods=['GET'])
 def callback():
     code = request.values['code']
@@ -117,6 +121,7 @@ def request_media(method, params={}):
         return render_template('msg.html', msg=e)
 
     return media
+
 
 def is_authorized():
     return False if not session['access_token'] else True
