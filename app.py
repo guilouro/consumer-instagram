@@ -122,7 +122,7 @@ def request_media(method, params={}):
 
 
 def is_authorized():
-    return False if not session['access_token'] else True
+    return False if 'access_token' not in session else True
 
 
 if __name__ == '__main__':
