@@ -32,7 +32,8 @@ def index():
         except Exception as e:
             return render_template('msg.html', msg=e)
 
-        return render_template('index.html', media=media)
+        text = request.values['text'] if 'text' in request.values else None
+        return render_template('index.html', media=media, text=text)
 
     try:
         url = auth.get_authorize_url(scope=["likes", "comments"])
@@ -57,7 +58,8 @@ def tag(tag_name):
     except Exception as e:
         return render_template('msg.html', msg=e)
 
-    return render_template('index.html', media=media, tag='#%s' % tag_name)
+    text = request.values['text'] if 'text' in request.values else None
+    return render_template('index.html', media=media, tag='#%s' % tag_name, text=text)
 
 
 @app.route('/popular')
@@ -76,7 +78,8 @@ def popular():
     except Exception as e:
         return render_template('msg.html', msg=e)
 
-    return render_template('index.html', media=media)
+    text = request.values['text'] if 'text' in request.values else None
+    return render_template('index.html', media=media, text=text)
 
 
 

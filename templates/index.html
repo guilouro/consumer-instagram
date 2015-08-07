@@ -15,8 +15,13 @@
 {% endblock back %}
 
 {% block content %}
+    {% if text == None %}
 
-    {% if tag %}
-        <h1>{{ tag }}</h1>
+        {% if tag %}
+            <h1>{{ tag }}</h1>
+        {% endif %}
+
+    {% else %}
+        <h1>{{ text }}</h1>
     {% endif %}
 {% endblock content %}
