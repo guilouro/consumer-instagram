@@ -41,6 +41,40 @@ def index():
         return render_template('msg.html', msg=e)
 
 
+@app.route('/tag/<tag_name>')
+def tag(tag_name):
+    if not is_authorized:
+        redirect('/')
+
+    try:
+        api = client.InstagramAPI(
+            access_token=session['access_token'],
+            client_secret=CONFIG['client_secret']
+        )
+
+        media = request_media(api.tag_recent_media, {'tag_name': tag_name})
+
+    except Exception as e:
+        return render_template('msg.html', msg=e)
+
+    return render_template('index.html', media=media, tag='#%s' % tag_name)
+
+
+def request_media(method, params):
+    try:
+        media, next_ = method(count=100, **params)
+
+        while next_ and len(media) < 100:
+            more_medias, next_ = method(
+                with_next_url=next_, count=100, **params)
+            media.extend(more_medias)
+
+    except Exception as e:
+        return render_template('msg.html', msg=e)
+
+    return media
+
+
 @app.route('/auth_callback', methods=['GET'])
 def callback():
     code = request.values['code']
@@ -59,40 +93,6 @@ def callback():
         return render_template('msg.html', msg=e)
 
     return redirect('/')
-
-
-@app.route('/tag/<tag_name>')
-def tag(tag_name):
-    if not is_authorized:
-        redirect('/')
-
-    try:
-        api = client.InstagramAPI(
-            access_token=session['access_token'],
-            client_secret=CONFIG['client_secret']
-        )
-
-        media = request_media(api.tag_recent_media, {'tag_name': tag_name})
-
-    except Exception as e:
-        return render_template('msg.html', msg=e)
-
-    return render_template('index.html', media=media, tag=tag_name)
-
-
-def request_media(method, params):
-    try:
-        media, next_ = method(count=100, **params)
-
-        while next_ and len(media) < 100:
-            more_medias, next_ = method(
-                with_next_url=next_, count=100, **params)
-            media.extend(more_medias)
-
-    except Exception as e:
-        return render_template('msg.html', msg=e)
-
-    return media
 
 
 @property
