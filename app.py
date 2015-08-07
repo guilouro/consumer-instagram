@@ -115,9 +115,7 @@ def request_media(method, params={}):
             more_medias, next_ = method(
                 with_next_url=next_, count=100, **params)
             media.extend(more_medias)
-            print len(media)
     except Exception as e:
-        print e
         return render_template('msg.html', msg=e)
 
     return media
