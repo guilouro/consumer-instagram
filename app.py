@@ -19,7 +19,7 @@ auth = client.InstagramAPI(**CONFIG)
 @app.route('/')
 def index():
 
-    if is_authorized:
+    if is_authorized():
         try:
             api = client.InstagramAPI(
                 access_token=session['access_token'],
@@ -43,8 +43,8 @@ def index():
 
 @app.route('/tag/<tag_name>')
 def tag(tag_name):
-    if not is_authorized:
-        redirect('/')
+    if not is_authorized():
+        return redirect('/')
 
     try:
         api = client.InstagramAPI(
@@ -60,19 +60,25 @@ def tag(tag_name):
     return render_template('index.html', media=media, tag='#%s' % tag_name)
 
 
-def request_media(method, params):
-    try:
-        media, next_ = method(count=100, **params)
+@app.route('/popular')
+def popular():
 
-        while next_ and len(media) < 100:
-            more_medias, next_ = method(
-                with_next_url=next_, count=100, **params)
-            media.extend(more_medias)
+    if not is_authorized():
+        return redirect('/')
+
+    try:
+        api = client.InstagramAPI(
+            access_token=session['access_token'],
+            client_secret=CONFIG['client_secret']
+        )
+        media = api.media_popular(count=100)
 
     except Exception as e:
         return render_template('msg.html', msg=e)
 
-    return media
+    return render_template('index.html', media=media)
+
+
 
 
 @app.route('/auth_callback', methods=['GET'])
@@ -95,7 +101,20 @@ def callback():
     return redirect('/')
 
 
-@property
+def request_media(method, params={}):
+    try:
+        media, next_ = method(count=100, **params)
+        while next_ and len(media) < 100:
+            more_medias, next_ = method(
+                with_next_url=next_, count=100, **params)
+            media.extend(more_medias)
+            print len(media)
+    except Exception as e:
+        print e
+        return render_template('msg.html', msg=e)
+
+    return media
+
 def is_authorized():
     return False if not session['access_token'] else True
 
