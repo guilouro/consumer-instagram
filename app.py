@@ -9,7 +9,7 @@ app.secret_key = '\xcb\xf0\x83"\xbe\xeb\x85\xa6rm\x95\xfe\x10\x920\xef\xaf&rs\xf
 CONFIG = {
     'client_id': '77da745ad09b49389fc1af582f4f9da2',
     'client_secret': '56bd0896031a4ac0830511c887199a94',
-    'redirect_uri': 'http://localhost:5000/auth_callback'
+    'redirect_uri': 'https://instaconsumer.herokuapp.com/auth_callback'
 }
 
 
