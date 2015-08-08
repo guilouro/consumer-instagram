@@ -1,36 +1,36 @@
 # Instagram Consumer
 ----
-Exemplo feito em Flask para consumir a API do Instagram
+Example created with [Flask](http://flask.pocoo.org/) to consume the Instagram API.
 [http://instaconsumer.herokuapp.com/](http://instaconsumer.herokuapp.com/)
 
-## Como funciona:
+## How it works:
 
-`/`: Fotos recentes do usuário logado.
+`/`: Get recents photos of logged user.
 ```python
-# Exemplo
+# Example
 # http://instaconsumer.herokuapp.com/
 ```
-`/<username>`: Fotos de determinado usuario
+`/<username>`: Get photos searching by username.
 ```python
-# Exemplo
+# Example
 # http://instaconsumer.herokuapp.com/guilhermelouro
 ```
 
-`/popular`: Fotos populares do instagram
+`/popular`: Get popular photos of Instagram.
 ```python
-# Exemplo
+# Example
 # http://instaconsumer.herokuapp.com/popular
 ```
 
-`/tag/<tag_name>`: Fotos de determinada hastag
+`/tag/<tag_name>`: Get photos searching by hashtag.
 ```python
-# Exemplo
+# Example
 # http://instaconsumer.herokuapp.com/tag/python
 ```
 
-`?text=LoremIpsum`: Modifica o texto central da página
+`?text=LoremIpsum`: Change the central text of the page.
 ```python
-# Exemplo
+# Example
 """
 http://instaconsumer.herokuapp.com/?text=LoremIpsum
 http://instaconsumer.herokuapp.com/guilhermelouro?text=LoremIpsum
