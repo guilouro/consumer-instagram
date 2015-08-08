@@ -1,6 +1,6 @@
 # Instagram Consumer
 ----
-Example created with [Flask](http://flask.pocoo.org/) to consume Instagram API.
+Example created with [Flask](http://flask.pocoo.org/) to consume the Instagram API.
 [http://instaconsumer.herokuapp.com/](http://instaconsumer.herokuapp.com/)
 
 ## How it works:
